@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item>
         <bitmap
             android:src="@drawable/paw_line_white" />
@@ -7,11 +8,10 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="5dp" />
-            <gradient android:angle="225"
-                android:startColor="#000B61A4"
-                android:centerColor="#001D418C"
-                android:endColor="#1D418C">
-
+            <gradient android:angle="10"
+                android:startColor="#11FFFFFF"
+                android:centerColor="#10FFFFFF"
+                android:endColor="#27000000">
             </gradient>
             <stroke android:color="#000000" android:width="1dp" />
 

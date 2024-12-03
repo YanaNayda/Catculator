@@ -15,15 +15,28 @@
         android:layout_margin="15dp"
         android:layout_weight="0.6"
         android:background="@drawable/design_text_three_cats"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:gravity="bottom|end"
+            android:paddingRight="29dp"
+            android:paddingBottom="10dp"
+            android:text="Result"
+            android:textColor="#323943"
+            android:textSize="25sp"
+            />
 
         <TextView
             android:id="@+id/TextCalc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="top|center"
+            android:layout_gravity="center"
             android:layout_weight="0.4"
-            android:gravity="center"
+            android:gravity="center|top"
             android:text="Calculator"
             android:textColor="#000000"
             android:textSize="42sp" />
@@ -35,6 +48,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -48,19 +63,19 @@
             android:onClick="funcButton"
             android:text="C"
             android:textColor="#000000"
-            android:textSize="32sp" />
+            android:textSize="30sp" />
 
         <Button
-            android:id="@+id/ButtonClose"
+            android:id="@+id/ButtonDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/design_btn_clew"
-            android:text="()"
+            android:text="Del"
             android:textColor="@color/black"
             android:gravity="center"
-            android:textSize="32sp" />
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/ButtonDivision"
@@ -69,9 +84,9 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/design_btn_paw_line_grey"
-            android:textColor="@color/black"
             android:text="/"
-            android:textSize="32sp" />
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/ButtonMulty"
@@ -82,7 +97,7 @@
             android:background="@drawable/design_btn_black_cat"
             android:text="*"
             android:textColor="@color/black"
-            android:textSize="32sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -91,6 +106,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -106,7 +123,7 @@
             android:textSize="32sp" />
 
         <Button
-            android:id="@+id/ButtonEighn"
+            android:id="@+id/ButtonEight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -145,6 +162,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -200,6 +219,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
 
         android:orientation="horizontal">
@@ -239,7 +260,7 @@
             android:textSize="32sp" />
 
         <Button
-            android:id="@+id/ButtonPercent"
+            android:id="@+id/buttonPercent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -255,6 +276,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -277,7 +300,7 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:background="@drawable/design_button"
-            android:text=" . "
+            android:text="."
             android:textSize="32sp"/>
 
         <Button
