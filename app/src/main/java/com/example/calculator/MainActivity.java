@@ -1,8 +1,14 @@
 package com.example.calculator;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,12 +17,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends AppCompatActivity {
 
     TextView result;
     TextView history;
+
     Button buttonOne;
     Button buttonTwo;
     Button buttonThree;
@@ -38,11 +43,22 @@ public class MainActivity extends AppCompatActivity {
     Button buttonPercent;
     Button buttonPoint;
 
+    ImageView image_meow_top;
+    ImageView image_meow_right;
+    ImageView image_meow_left;
+    ImageView image_mouse;
+    ImageView image_paw;
+
+    MediaPlayer cat_voice_1;
+    MediaPlayer cat_voice_2;
+
+
     float number = 0;
     String error = "Meow!Error!";
     char opeartor = '0';
     String[] parts;
     String[] partsDigit;
+
 
 
     @Override
@@ -81,11 +97,30 @@ public class MainActivity extends AppCompatActivity {
         buttonPoint = findViewById(R.id.buttonPoint);
         buttonPercent = findViewById(R.id.buttonPercent);
 
+        image_meow_right= findViewById(R.id.image_meow_right);
+        image_meow_left= findViewById(R.id.image_meow_left);
+        image_meow_top= findViewById(R.id.image_meow_top);
+        image_mouse= findViewById(R.id.image_mouse);
+        image_paw= findViewById(R.id.image_paw_black);
+
+        cat_voice_1= MediaPlayer.create(this,R.raw.cat_voice);
+        cat_voice_2= MediaPlayer.create(this,R.raw.cat_voice_second);
+
+
+        Animation animBlink = AnimationUtils.loadAnimation(this, R.anim.blink_animation);
+        Animation animRotation = AnimationUtils.loadAnimation(this, R.anim.rotate__mouse_animation);
+        Animation animRotationPaw = AnimationUtils.loadAnimation(this, R.anim.rotate_paw);
+
+
 
         result.setText("MeowСalculator");
         result.setText("0");
         history.setText("Result");
         history.setText("");
+        image_meow_top.setVisibility(image_meow_top.INVISIBLE);
+        image_meow_right.setVisibility(image_meow_right.INVISIBLE);
+        image_meow_left.setVisibility(image_meow_left.INVISIBLE);
+        image_mouse.setVisibility(image_mouse.INVISIBLE);
 
         buttonOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                image_paw.startAnimation(animRotationPaw);
+
                 number = 0;
                 opeartor = '0';
                 result.setText("0");
@@ -211,7 +248,34 @@ public class MainActivity extends AppCompatActivity {
         buttonMeow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                result.setText(error);
+
+                cat_voice_1.start();
+
+
+                image_meow_top.startAnimation(animBlink);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        image_meow_right.startAnimation(animBlink);
+                        cat_voice_2.start();
+                    }
+                }, 1000);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        image_meow_left.startAnimation(animBlink);
+                    }
+                }, 750);
+
+                image_mouse.startAnimation(animRotation);
+                image_meow_top.setVisibility(image_meow_top.INVISIBLE);
+                image_meow_right.setVisibility(image_meow_right.INVISIBLE);
+                image_meow_left.setVisibility(image_meow_left.INVISIBLE);
+                image_mouse.setVisibility(image_mouse.INVISIBLE);
+
+
             }
         });
 
@@ -219,14 +283,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void funcButton(View view) {
-        Button button = (Button) view; // Получаем нажатую кнопку.
-        String resultText = result.getText().toString(); // Текущий текст в поле вывода результата.
+        Button button = (Button) view;
+        String resultText = result.getText().toString();
         String newNumberFromButton = button.getText().toString();
-        history.setText("0");// Текст нажатой кнопки.
+        history.setText("0");
 
         if (resultText.length() > 20) {
-            result.setText(error); // Если длина результата больше 20, устанавливаем сообщение об ошибке.
-            return; // Прекращаем выполнение метода.
+            result.setText(error);
+            return;
         }
 
 
@@ -234,124 +298,137 @@ public class MainActivity extends AppCompatActivity {
         if (newNumberFromButton.equals("Del")) {
 
             if (resultText.length() > 1) {
-                result.setText(resultText.substring(0, resultText.length() - 1)); // Удаляем последний символ.
+                result.setText(resultText.substring(0, resultText.length() - 1));
             }
             else {
-                result.setText("0"); // Если длина 1, устанавливаем "0".
+                result.setText("0");
             }
-            return; // Прекращаем выполнение метода.
+            return;
         }
 
         if (resultText.equals(error)) {
-            result.setText("0"); // Если в поле ошибка, сбрасываем на "0".
-            newNumberFromButton = "0"; // Устанавливаем значение для дальнейших действий.
+            result.setText("");
+
         }
 
-        parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%"); // Разделяем строку по операторам.
+        parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
 
 
         if (newNumberFromButton.equals(".")) {
             if (parts.length > 0 && !parts[parts.length - 1].contains(".")) {
-                result.append(newNumberFromButton); // Добавляем точку, если её ещё нет.
+                result.append(newNumberFromButton);
             }
         }
         else {
             if (parts.length > 0 && parts[parts.length - 1].startsWith("0") && parts[parts.length - 1].length() > 1 && !parts[parts.length - 1].contains(".")) {
                 result.setText(resultText.substring(0, result.getText().toString().length() - parts[parts.length - 1].length()) +
                         parts[parts.length - 1].substring(1));
-                // Убираем ведущий "0", если он не является частью числа с плавающей точкой.
+                result.append(newNumberFromButton);
             }
-            else {
-                if (resultText.equals("0") && (!newNumberFromButton.equals("0") || !resultText.equals("")) && !newNumberFromButton.equals("Del")) {
-                    result.setText(newNumberFromButton); // Заменяем "0" новым значением.
+            else{
+                if (parts.length == 2 && parts[parts.length - 1].startsWith("0") && parts[parts.length - 1].length() >= 1 && !parts[parts.length - 1].contains(".") ){
+                    result.setText(resultText.substring(0, result.getText().toString().length() - parts[parts.length - 1].length()) +
+                            parts[parts.length - 1].substring(1));
+                    result.append(newNumberFromButton);
                 }
                 else {
-                    if (resultText.equals("0") && newNumberFromButton.equals("0")) {
-                        result.setText(newNumberFromButton); // Устанавливаем "0".
+                    if (resultText.equals("0") && (!newNumberFromButton.equals("0") || !resultText.equals("")) && !newNumberFromButton.equals("Del")) {
+                        result.setText(newNumberFromButton);
                     } else {
-                        result.append(newNumberFromButton); // Добавляем новое число.
+                        if (resultText.equals("0") && newNumberFromButton.equals("0")) {
+                            result.setText(newNumberFromButton);
+                        } else {
+                            result.append(newNumberFromButton);
+                        }
                     }
                 }
             }
         }
-    }
+            }
 
     public void funcEquals(View view) {
 
-        Button button = (Button) view; // Получаем нажатую кнопку.
-        char ch = button.getText().toString().charAt(0); // Получаем символ нажатой кнопки.
+        Button button = (Button) view;
+        char newNumberFromButton = button.getText().toString().charAt(0);
         float secondNumber = 0;
-        int flag=0;// Инициализируем переменную для второго числа.
 
 
         if (result.getText().toString().equals(error)) {
-            result.setText("0"); // Сбрасываем поле результата при ошибке.
-
+            result.setText("");
         }
+
+
         parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
 
+        if ((newNumberFromButton != '=' && parts.length < 2 ) || (newNumberFromButton != '=' && parts.length<=2 && parts[0].equals(""))) {
+            if (!Character.isDigit(result.getText().toString().charAt(result.getText().toString().length() - 1))) {
+                result.setText(result.getText().toString().substring(0, result.length() - 1) + newNumberFromButton);
+            }
+            else {
+                result.append(String.valueOf(newNumberFromButton));
 
-
-        if (ch != '='&& parts.length < 2 ) {
-
-
-                if (!Character.isDigit(result.getText().toString().charAt(result.getText().toString().length() - 1))) {
-                    result.setText(result.getText().toString().substring(0, result.length() - 1) + ch);
-                    // Заменяем последний символ оператором.
-                } else {
-                    result.append(String.valueOf(ch));
-                    opeartor = ch;
-                }
-                opeartor = ch;
-
+            }
+            opeartor = newNumberFromButton;
         }
 
         else {
-            if (parts.length == 2){
+            if (parts.length == 2 || (parts.length==3 && parts[0].equals(""))) {
 
                 parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
-                number = Float.parseFloat(parts[0]); // Парсим первое число.
+                if (parts.length==2){
+                    if (parts[0].equals("")) {
+                        result.setText(error);
+                        return;
+                    }
+                    number = Float.parseFloat(parts[0]);
+                }
+
+                if(parts.length==3){
+                    number = Float.parseFloat( parts[1]);
+                    number=(-1)*number;
+                }
 
                 if (parts.length > 1) {
-                    secondNumber = Float.parseFloat(parts[1]); // Парсим второе число.
+                    secondNumber = Float.parseFloat(parts[parts.length-1]);
+
                     switch (opeartor) {
                         case '+':
-                            number += secondNumber; // Сложение.
+                            number += secondNumber;
                             break;
                         case '-':
-                            number -= secondNumber; // Вычитание.
+                            number -= secondNumber;
                             break;
                         case '*':
-                            number *= secondNumber; // Умножение.
+                            number *= secondNumber;
                             break;
                         case '/':
                             if (parts[parts.length - 1].equals("0")) {
-                                result.setText(error); // Ошибка при делении на 0.
+                                result.setText(error);
                                 number = 0;
                             } else {
-                                number = number / secondNumber; // Деление.
+                                number = number / secondNumber;
                             }
                             break;
                         case '%':
-                            number = number / 100; // Вычисление процента.
+                            number = number / 100;
                             break;
                     }
-                    opeartor=button.getText().toString().charAt(0);
+                    opeartor = button.getText().toString().charAt(0);
 
 
                     if (result.getText().toString().isEmpty()) {
-                        result.setText(error); // Ошибка, если поле результата пустое.
+                        result.setText(error);
                     }
                     else {
 
                         history.setText(result.getText().toString());
 
                         if (number == (int) number) {
-                            result.setText(String.valueOf((int) number)); // Убираем дробную часть, если она равна 0.
+                            result.setText(String.valueOf((int) number));
                         }
                         else {
                             if ((number % 1 == 0)) {
-                                result.setText(result.getText().toString().substring(0, result.length() - 1) );
+                                result.setText(result.getText().toString().substring(0, result.length() - 1));
 
                             }
                             else {
@@ -359,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         }
-                        if (opeartor!='='){
+                        if (opeartor != '=') {
                             result.append(String.valueOf(opeartor));
                         }
 
@@ -373,7 +450,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 }
-
-

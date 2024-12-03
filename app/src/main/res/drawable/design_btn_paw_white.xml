@@ -3,6 +3,7 @@
 
     <item>
         <bitmap
+
             android:src="@drawable/paw_line_white" />
     </item>
     <item>
