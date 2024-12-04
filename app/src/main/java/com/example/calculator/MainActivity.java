@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     String error = "Meow!Error!";
     char opeartor = '0';
     String[] parts;
-    String[] partsDigit;
+
 
 
 
@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
         result.setText("0");
         history.setText("Result");
         history.setText("");
-        image_meow_top.setVisibility(image_meow_top.INVISIBLE);
-        image_meow_right.setVisibility(image_meow_right.INVISIBLE);
-        image_meow_left.setVisibility(image_meow_left.INVISIBLE);
-        image_mouse.setVisibility(image_mouse.INVISIBLE);
+       image_meow_top.setVisibility(image_meow_top.INVISIBLE);
+       image_meow_right.setVisibility(image_meow_right.INVISIBLE);
+       image_meow_left.setVisibility(image_meow_left.INVISIBLE);
+       image_mouse.setVisibility(image_mouse.INVISIBLE);
 
         buttonOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,16 +251,20 @@ public class MainActivity extends AppCompatActivity {
 
                 cat_voice_1.start();
 
-
+                //Start voice and animation
                 image_meow_top.startAnimation(animBlink);
+
+                //Delay for animation  and voice
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
 
                         image_meow_right.startAnimation(animBlink);
                         cat_voice_2.start();
                     }
                 }, 1000);
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -269,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, 750);
 
+                //Start anomation
                 image_mouse.startAnimation(animRotation);
                 image_meow_top.setVisibility(image_meow_top.INVISIBLE);
                 image_meow_right.setVisibility(image_meow_right.INVISIBLE);
@@ -288,6 +293,8 @@ public class MainActivity extends AppCompatActivity {
         String newNumberFromButton = button.getText().toString();
         history.setText("0");
 
+
+        //Check if result is too long
         if (resultText.length() > 20) {
             result.setText(error);
             return;
@@ -295,56 +302,71 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        //Check if Button is Delete
         if (newNumberFromButton.equals("Del")) {
-
             if (resultText.length() > 1) {
                 result.setText(resultText.substring(0, resultText.length() - 1));
             }
             else {
+
                 result.setText("0");
             }
             return;
         }
 
+
+        // check if it was error
         if (resultText.equals(error)) {
             result.setText("");
-
         }
 
+
+        //Separation of numbers with symbols
         parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
 
 
+
+        //Check if Button is Point and if  the number already have a point
         if (newNumberFromButton.equals(".")) {
             if (parts.length > 0 && !parts[parts.length - 1].contains(".")) {
                 result.append(newNumberFromButton);
             }
         }
         else {
+
+            //Check if we need to remove a zero before a number( 05 -> 5)
             if (parts.length > 0 && parts[parts.length - 1].startsWith("0") && parts[parts.length - 1].length() > 1 && !parts[parts.length - 1].contains(".")) {
                 result.setText(resultText.substring(0, result.getText().toString().length() - parts[parts.length - 1].length()) +
                         parts[parts.length - 1].substring(1));
                 result.append(newNumberFromButton);
             }
             else{
+
                 if (parts.length == 2 && parts[parts.length - 1].startsWith("0") && parts[parts.length - 1].length() >= 1 && !parts[parts.length - 1].contains(".") ){
                     result.setText(resultText.substring(0, result.getText().toString().length() - parts[parts.length - 1].length()) +
                             parts[parts.length - 1].substring(1));
                     result.append(newNumberFromButton);
                 }
                 else {
+
+                    //Set text if in result was zeero and number is not zero
                     if (resultText.equals("0") && (!newNumberFromButton.equals("0") || !resultText.equals("")) && !newNumberFromButton.equals("Del")) {
                         result.setText(newNumberFromButton);
-                    } else {
+                    }
+                    else {
+
                         if (resultText.equals("0") && newNumberFromButton.equals("0")) {
                             result.setText(newNumberFromButton);
-                        } else {
+                        }
+                        else {
+                            //Add a number to result
                             result.append(newNumberFromButton);
                         }
                     }
                 }
             }
         }
-            }
+    }
 
     public void funcEquals(View view) {
 
@@ -352,19 +374,22 @@ public class MainActivity extends AppCompatActivity {
         char newNumberFromButton = button.getText().toString().charAt(0);
         float secondNumber = 0;
 
-
+       //Remove error messsage
         if (result.getText().toString().equals(error)) {
             result.setText("");
         }
 
-
+       //Separate numbers with symbols
         parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
 
+       //Check if we need to remove a zero before a number( 05 -> 5)
         if ((newNumberFromButton != '=' && parts.length < 2 ) || (newNumberFromButton != '=' && parts.length<=2 && parts[0].equals(""))) {
             if (!Character.isDigit(result.getText().toString().charAt(result.getText().toString().length() - 1))) {
                 result.setText(result.getText().toString().substring(0, result.length() - 1) + newNumberFromButton);
             }
+
             else {
+                // Add a number to result
                 result.append(String.valueOf(newNumberFromButton));
 
             }
@@ -372,9 +397,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else {
+            //Check if it two parts of string or three (it could be with use "-" with  first number)
             if (parts.length == 2 || (parts.length==3 && parts[0].equals(""))) {
 
-                parts = result.getText().toString().split("\\+|\\-|\\/|\\*|\\%");
+                //Two parts of string
                 if (parts.length==2){
                     if (parts[0].equals("")) {
                         result.setText(error);
@@ -383,14 +409,17 @@ public class MainActivity extends AppCompatActivity {
                     number = Float.parseFloat(parts[0]);
                 }
 
+                //Three parts of string -> with use "-" with  first number
                 if(parts.length==3){
                     number = Float.parseFloat( parts[1]);
                     number=(-1)*number;
                 }
 
+                 //Inizialization of second number
                 if (parts.length > 1) {
                     secondNumber = Float.parseFloat(parts[parts.length-1]);
 
+                    //Use operators
                     switch (opeartor) {
                         case '+':
                             number += secondNumber;
@@ -420,22 +449,27 @@ public class MainActivity extends AppCompatActivity {
                         result.setText(error);
                     }
                     else {
-
+                        //Update history
                         history.setText(result.getText().toString());
 
+                        //Result is integer
                         if (number == (int) number) {
                             result.setText(String.valueOf((int) number));
                         }
+
                         else {
+                            //Result in float , but the end  is "0"
                             if ((number % 1 == 0)) {
                                 result.setText(result.getText().toString().substring(0, result.length() - 1));
 
                             }
                             else {
+                                //Add a result
                                 result.setText(String.valueOf(number));
                             }
 
                         }
+                        //Add the operator
                         if (opeartor != '=') {
                             result.append(String.valueOf(opeartor));
                         }
